@@ -249,12 +249,12 @@ int main()
             MEVENT event;
             if (getmouse(&event) == OK)
             {
-                snprintf(buffer, max_size, "Mouse at row=%d, column=%d bstate=0x%08lx",
-                         event.y, event.x, event.bstate);
+                // snprintf(buffer, max_size, "Mouse at row=%d, column=%d bstate=0x%08lx",
+                //          event.y, event.x, event.bstate);
             }
             else
             {
-                snprintf(buffer, max_size, "Got bad mouse event.");
+                // snprintf(buffer, max_size, "Got bad mouse event.");
             }
             break;
         }

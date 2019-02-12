@@ -1,2 +1,2 @@
-# fpp
-Basic ncurses ascii raycasting demo.
+# fpp - basic ncurses ascii raycasting demo
+

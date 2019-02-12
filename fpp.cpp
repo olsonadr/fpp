@@ -117,7 +117,7 @@ int main()
     signal(SIGINT, finish); /* arrange interrupts to terminate */
     initscr();              /* initialize the curses library */
     resize_term(term_height, term_width);
-    mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
+    // mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
     printf("\033[?1003h\n");
     keypad(stdscr, TRUE); /* enable keyboard mapping */
     nonl();               /* tell curses not to do NL->CR/NL on output */
@@ -245,18 +245,18 @@ int main()
                 change_tweakable(view_distance, '+', .5);
             }
             break;
-        case KEY_MOUSE:
-            MEVENT event;
-            if (getmouse(&event) == OK)
-            {
-                // snprintf(buffer, max_size, "Mouse at row=%d, column=%d bstate=0x%08lx",
-                //          event.y, event.x, event.bstate);
-            }
-            else
-            {
-                // snprintf(buffer, max_size, "Got bad mouse event.");
-            }
-            break;
+        // case KEY_MOUSE:
+        //     MEVENT event;
+        //     if (getmouse(&event) == OK)
+        //     {
+        //         snprintf(buffer, max_size, "Mouse at row=%d, column=%d bstate=0x%08lx",
+        //                  event.y, event.x, event.bstate);
+        //     }
+        //     else
+        //     {
+        //         snprintf(buffer, max_size, "Got bad mouse event.");
+        //     }
+        //     break;
         }
         // End User Input
 

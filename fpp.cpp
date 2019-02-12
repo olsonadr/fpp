@@ -113,12 +113,11 @@ int main()
     bool display_bar = true;
     // End Tweakables
 
-    // ncurses intitialization, source: https://invisible-island.net/ncurses/ncurses-intro.html#updating
+    /* ncurses intitialization, source: https://invisible-island.net/ncurses/ncurses-intro.html#updating */
     signal(SIGINT, finish); /* arrange interrupts to terminate */
     initscr();              /* initialize the curses library */
     resize_term(term_height, term_width);
-    // mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
-    printf("\033[?1003h\n");
+    mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
     keypad(stdscr, TRUE); /* enable keyboard mapping */
     nonl();               /* tell curses not to do NL->CR/NL on output */
     cbreak();             /* take input chars one at a time, no wait for \n */
@@ -135,7 +134,16 @@ int main()
         init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
         init_pair(7, COLOR_WHITE, COLOR_BLACK);
     }
-    // end ncurses initialization
+    /* End ncurses initialization */
+
+    /* ANSI escape sequence modifications */
+    char resize_buff[30];
+    sprintf(resize_buff,
+            "printf '\e[8;%d;%dt'",
+            term_height, term_width); // ANSI sequence, resizes terminal
+    system(resize_buff);
+    system("printf '\e[?25l'");
+    /* End ANSI stuff */
 
     // Game Loop
     int input;
@@ -245,18 +253,18 @@ int main()
                 change_tweakable(view_distance, '+', .5);
             }
             break;
-        // case KEY_MOUSE:
-        //     MEVENT event;
-        //     if (getmouse(&event) == OK)
-        //     {
-        //         snprintf(buffer, max_size, "Mouse at row=%d, column=%d bstate=0x%08lx",
-        //                  event.y, event.x, event.bstate);
-        //     }
-        //     else
-        //     {
-        //         snprintf(buffer, max_size, "Got bad mouse event.");
-        //     }
-        //     break;
+            // case KEY_MOUSE:
+            //     MEVENT event;
+            //     if (getmouse(&event) == OK)
+            //     {
+            //         snprintf(buffer, max_size, "Mouse at row=%d, column=%d bstate=0x%08lx",
+            //                  event.y, event.x, event.bstate);
+            //     }
+            //     else
+            //     {
+            //         snprintf(buffer, max_size, "Got bad mouse event.");
+            //     }
+            //     break;
         }
         // End User Input
 
@@ -264,6 +272,9 @@ int main()
         render_view(distances, map, map_width, map_height, player_x, player_y, term_width, term_height, retinal_distance, player_a, view_distance, display_map, tweakables_string, display_bar);
     }
     // End Game Loops
+
+    // Cleanup
+    system("printf '\e[?25h'");
     delete distances;
     finish(SIGINT);
     return 0;
@@ -290,7 +301,7 @@ void render_view(
         float distance_at_x = distances[x];
         // if (distance_at_x >= 1)
         // {
-            projection_height = terminal_height * (retinal_distance / distance_at_x); //(terminal_height * (1 / pow(distances[x], 1.3)));
+        projection_height = terminal_height * (retinal_distance / distance_at_x); //(terminal_height * (1 / pow(distances[x], 1.3)));
         // }
         // else
         // {
@@ -433,7 +444,7 @@ float ray(float x, float y,
         {
             // detected_x.push_back(x);
             // detected_y.push_back(y);
-            
+
             return i;
         }
     }
